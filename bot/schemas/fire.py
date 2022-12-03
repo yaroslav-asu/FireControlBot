@@ -1,44 +1,46 @@
-from pydantic import BaseModel, HttpUrl
+from pydantic import BaseModel
 
 from typing import Sequence
 
 
-class FireBase(BaseModel):
-    label: str
-    source: str
-    url: HttpUrl
+class UserBase(BaseModel):
+    pass
 
+class UserCreate(UserBase):
+    chat_id: int
+    count: bool = False
+    causes: bool = False
+    area: bool = False
+    time: bool = False
 
-class FireCreate(FireBase):
-    locality: str
-
-class FireUpdate(FireBase):
+class UserUpdate(UserBase):
     id: int
+    count: bool
+    causes: bool
+    area: bool
+    time: bool
 
 
-class FireUpdateRestricted(BaseModel):
+class UserUpdateRestricted(BaseModel):
     id: int
-    label: str
-
 
 # Properties shared by models stored in DB
-class FireInDBBase(FireBase):
+class UserInDBBase(UserBase):
     id: int
-    submitter_id: int
 
     class Config:
         orm_mode = True
 
 
 # Properties to return to client
-class Fire(FireInDBBase):
+class Fire(UserInDBBase):
     pass
 
 
 # Properties properties stored in DB
-class FireInDB(FireInDBBase):
+class FireInDB(UserInDBBase):
     pass
 
 
-class FireSearchResults(BaseModel):
+class UserSearchResults(BaseModel):
     results: Sequence[Fire]
