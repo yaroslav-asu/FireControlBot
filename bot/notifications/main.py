@@ -2,10 +2,10 @@ import schedule
 from time import sleep
 from threading import Thread
 from functools import partial
-from bot.notifications.day import day_notification
-from bot.notifications.month import month_notification
-from bot.notifications.year import year_notification
-from bot.notifications.season import season_notification
+from bot.notifications.day import day_notification_text
+from bot.notifications.month import month_notification_text
+from bot.notifications.year import year_notification_text
+from bot.notifications.season import season_notification_text
 from calendar import monthrange
 from datetime import datetime
 from datetime import date
@@ -37,7 +37,7 @@ def update_year_days_count():
 def check_season_notification(chat_id):
     if datetime.now().month == 3:
         # TODO add args
-        season_notification(chat_id, 1, 1, 1, 1)
+        season_notification_text(chat_id, 1, 1, 1, 1)
 
 
 def setup_notifications():
@@ -48,11 +48,11 @@ def setup_notifications():
 
     for chat_id in user_chat_ids:
         # TODO add args to functions
-        schedule.every().day.do(partial(day_notification, chat_id))
-        schedule.every().day.at("12:00").do(partial(month_notification, chat_id, 1, 1, 1, 1, 1, 1, 1, 1, 1))
-        schedule.every(month_days_count).days.at("12:00").do(partial(month_notification, chat_id, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+        schedule.every().day.do(partial(day_notification_text, chat_id))
+        schedule.every().day.at("12:00").do(partial(month_notification_text, chat_id, 1, 1, 1, 1, 1, 1, 1, 1, 1))
+        schedule.every(month_days_count).days.at("12:00").do(partial(month_notification_text, chat_id, 1, 1, 1, 1, 1, 1, 1, 1, 1),
                                                              update_month_days_count)
-        schedule.every(year_days_count).days.at("12:00").do(partial(year_notification, chat_id, 1, 1, 1),
+        schedule.every(year_days_count).days.at("12:00").do(partial(year_notification_text, chat_id, 1, 1, 1),
                                                             update_year_days_count)
         schedule.every().day.at("12:00").do(partial(check_season_notification, chat_id))
     Thread(target=schedule_checker).start()
