@@ -6,10 +6,10 @@ from bot.interfaces.menues.main import show_main_menu
 from telebot.types import ReplyKeyboardRemove
 
 button_titles = {
-    'count': ["🫘 Количество", False],
-    'causes': ["💥 Причины", False],
-    'area': ["🏞️ Площадь", False],
-    'time': ["⌚ Среднее время", False],
+    'count': ["Количество", False],
+    'causes': ["Причины", False],
+    'area': ["Площадь", False],
+    'time': ["Среднее время", False],
 }
 
 
