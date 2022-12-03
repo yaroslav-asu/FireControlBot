@@ -6,17 +6,16 @@ from bot.interfaces.menues.main import show_main_menu
 from telebot.types import ReplyKeyboardRemove
 
 button_titles = {
-    'count': ["🫘 Количество", False],
-    'causes': ["💥 Причины", False],
-    'area': ["🏞️ Площадь", False],
-    'time': ["⌚ Среднее время", False],
+    'count': ["Количество", False],
+    'causes': ["Причины", False],
+    'area': ["Площадь", False],
+    'time': ["Среднее время", False],
 }
 
 
 @bot.message_handler(state=UserState.chart_type)
 def handle_select_fire_period(message):
     try:
-        print(message.text.split(' - '))
         first_date, second_date = map(lambda x: datetime.strptime(x, "%d.%m.%Y").date(), message.text.split(' - '))
         bot.send_message(message.chat.id,
                          "Отлично, осталось только подождать, пока загрузятся диаграммы")
@@ -32,6 +31,8 @@ def handle_chart_select(message):
     if message.text == '⬅️ Назад':
         show_charts_menu(message)
     else:
+        with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
+            data['chart_type'] = message.text[2:]
         bot.send_message(message.chat.id,
                          "Введите даты, данные за которые вы хотите получить в формате: дд.мм.гггг - дд.мм.гггг",
                          reply_markup=ReplyKeyboardRemove())
@@ -50,6 +51,7 @@ def show_select_chart_menu(message):
 
 @bot.message_handler(state=UserState.charts_menu)
 def handle_buttons_toggling(message):
+    message_text = message.text.replace(' ✅', '')
     with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
         data['charts_menu'] = True
     if message.text == '⬅️ Назад':
@@ -66,7 +68,15 @@ def handle_buttons_toggling(message):
             show_select_chart_menu(message)
         return
     for key, values in button_titles.items():
-        if values[0] == message.text.replace(' ✅', ''):
+        if values[0] == message_text:
+            with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
+                if 'chart_data' not in data.keys():
+                    data['chart_data'] = {message_text, }
+                else:
+                    if message_text in data['chart_data']:
+                        data['chart_data'].remove(message_text)
+                    else:
+                        data['chart_data'].add(message_text)
             button_titles[key][1] = not button_titles[key][1]
     show_charts_menu(message, 'Еще что то?')
 

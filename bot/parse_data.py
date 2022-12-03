@@ -1,5 +1,6 @@
 from datetime import datetime
 from json import load
+from pprint import pprint
 
 
 def load_fire_data(files):
@@ -54,7 +55,7 @@ def load_fire_data(files):
 
 
 if __name__ == "__main__":
-    print(load_fire_data([("./extra_data/yasen_06_2022_getFireInformationResponse.json",
+    pprint(load_fire_data([("./extra_data/yasen_06_2022_getFireInformationResponse.json",
                            "./extra_data/yasen_06_2022_getDynamicsResponse.json"),
                           ("./extra_data/yasen_07_2022_getFireInformationResponse.json",
                            "./extra_data/yasen_07_2022_getDynamicsResponse.json")]))
