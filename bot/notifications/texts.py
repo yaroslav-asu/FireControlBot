@@ -61,7 +61,7 @@ def get_summary_of_the_time(days: int):
             fires_count += 1
             if value['area'] is not None:
                 sum_area += value['area']
-    return fires_count, sum_area
+    return fires_count, round(sum_area, 2)
 
 
 def get_summary_of_the_day():
