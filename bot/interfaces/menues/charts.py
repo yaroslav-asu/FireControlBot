@@ -20,6 +20,7 @@ def select_fires_period(message):
     pass
 
 
+@bot.message_handler(state=UserState.select_chart_menu)
 def handle_chart_select(message):
     if message.text == 'Назад':
         show_charts_menu(message, )
@@ -32,10 +33,13 @@ def select_chart_menu(message):
     markup.add("Столбчатая")
     markup.add("Назад")
     bot.send_message(message.chat.id, "Веберите тип диараммы", reply_markup=markup)
-    bot.register_next_step_handler(message, handle_chart_select)
+    bot.set_state(message.from_user.id, UserState.select_chart_menu, message.chat.id)
 
 
+@bot.message_handler(state=UserState.charts_menu)
 def handle_buttons_toggling(message):
+    with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
+        data['charts_menu'] = True
     if message.text == 'Назад':
         show_main_menu(message)
         return
@@ -56,6 +60,8 @@ def handle_buttons_toggling(message):
 
 
 def show_charts_menu(message, text='Какие должны быть данные'):
+    with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
+        data['charts_menu'] = message.text
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     titles = [f"{button_titles[title][0]} {'✅' if button_titles[title][1] else ''}" for title in button_titles.keys()]
     markup.row(titles[0], titles[1])
@@ -63,5 +69,4 @@ def show_charts_menu(message, text='Какие должны быть данны�
     markup.add("Далее")
     markup.add("Назад")
     bot.send_message(message.chat.id, text, reply_markup=markup)
-    bot.register_next_step_handler(message, handle_buttons_toggling)
-
+    bot.set_state(message.from_user.id, UserState.charts_menu, message.chat.id)

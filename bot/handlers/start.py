@@ -8,7 +8,7 @@ from bot.models.user import User
 
 
 # greeting handler functions
-@bot.message_handler(commands=['start'])
+@bot.message_handler(state="*", commands=['start'])
 def handle_start(message):
     db = next(get_db())
     user_obj = db.query(User).filter(User.chat_id == int(message.chat.id)).first()
@@ -21,25 +21,20 @@ def handle_start(message):
                                       "году и пожароопасном сезоне"
                      )
     show_help(message)
+    get_location(message)
 
+
+def get_location(message):
     keyboard = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
     button_geo = types.KeyboardButton(text="Отправить местоположение", request_location=True)
     button_skip = types.KeyboardButton(text="Пропустить")
     keyboard.add(button_geo, button_skip)
     bot.send_message(message.chat.id, "Поделитесь местоположением", reply_markup=keyboard)
+    bot.set_state(message.from_user.id, UserState.location, message.chat.id)
 
 
-@bot.message_handler(content_types=['location'])
+@bot.message_handler(state=UserState.location)
 def location(message):
-    if message.location is not None:
-        print(message.location)
-    print(message)
-
+    with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
+        data['location'] = message.location
     show_main_menu(message)
-
-@bot.message_handler(content_types=['text'])
-def handle_text(message):
-    if message.text == "Пропустить":
-        show_main_menu(message)
-    else:
-        bot.send_message(message.chat.id, "Я вас не понимаю")
