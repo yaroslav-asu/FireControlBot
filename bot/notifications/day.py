@@ -2,8 +2,8 @@ from bot.config import *
 from parse_data import load_fire_data
 import datetime
 
-def day_notification_text(chat_id,
-                          fires_count: int,
+
+def day_notification_text(fires_count: int,
                           sum_area: float,
                           current_fires: int,
                           current_area: float,
@@ -17,11 +17,12 @@ def day_notification_text(chat_id,
            f"из них локализовано {extinguished_fires} шт., площадью {extinguished_area} га. " \
            f"{date} {time}"
 
+
 def get_summary_of_the_day():
     data = load_fire_data([("bot/extra_data/yasen_06_2022_getFireInformationResponse.json",
-                           "bot/extra_data/yasen_06_2022_getDynamicsResponse.json"),
-                          ("bot/extra_data/yasen_07_2022_getFireInformationResponse.json",
-                           "bot/extra_data/yasen_07_2022_getDynamicsResponse.json")])
+                            "bot/extra_data/yasen_06_2022_getDynamicsResponse.json"),
+                           ("bot/extra_data/yasen_07_2022_getFireInformationResponse.json",
+                            "bot/extra_data/yasen_07_2022_getDynamicsResponse.json")])
     fires_count = 0
     sum_area = 0
     for _, value in data.items():

@@ -2,7 +2,8 @@ import schedule
 from time import sleep
 from threading import Thread
 from functools import partial
-from bot.notifications.texts import day_notification_text,month_notification_text,year_notification_text,season_notification_text
+from bot.notifications.day import day_notification_text
+from bot.notifications.texts import month_notification_text,year_notification_text,season_notification_text
 from calendar import monthrange
 from datetime import datetime
 from datetime import date

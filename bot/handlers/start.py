@@ -15,7 +15,7 @@ def handle_start(message):
     if not user_obj:
         user_obj = user.create(db=db, data={'chat_id': int(message.chat.id)})
     db.close()
-    bot.send_message(message.chat.id, "Здравствуйте, я бот для оповедения о пожарной обстановке в ХМАО, "
+    bot.send_message(message.chat.id, "Здравствуйте, я бот для оповедения о пожарной обстановке в ХМАО - Югра, "
                                       "я буду держать вас в курсе, о статусе всех   текущих пожарах, "
                                       "а так же позволю узнать сводки пожаров в этом месяце, "
                                       "году и пожароопасном сезоне"
