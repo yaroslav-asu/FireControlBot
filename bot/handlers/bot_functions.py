@@ -1,7 +1,7 @@
 from bot.config import *
 from bot.functions.help import show_help
 
-from bot.notifications.day import get_summary_of_the_day
+from bot.notifications.texts import get_summary_of_the_day
 
 
 # greeting handler functions

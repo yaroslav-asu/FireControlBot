@@ -2,8 +2,8 @@ import schedule
 from time import sleep
 from threading import Thread
 from functools import partial
-from bot.notifications.day import day_notification_text
-from bot.notifications.texts import month_notification_text,year_notification_text,season_notification_text
+from bot.notifications.texts import send_day_notification, send_month_notification, send_year_notification, \
+    send_season_notification
 from calendar import monthrange
 from datetime import datetime
 from datetime import date
@@ -34,8 +34,7 @@ def update_year_days_count():
 
 def check_season_notification(chat_id):
     if datetime.now().month == 3:
-        # TODO add args
-        season_notification_text(chat_id, 1, 1, 1)
+        send_season_notification(chat_id)
 
 
 def setup_notifications():
@@ -45,12 +44,10 @@ def setup_notifications():
     user_chat_ids = map(lambda x: x.chat_id, user.get_multi(db=db))
 
     for chat_id in user_chat_ids:
-        # TODO add args to functions
-        schedule.every().day.do(partial(day_notification_text, chat_id))
-        schedule.every().day.at("12:00").do(partial(month_notification_text, chat_id, 1, 1, 1, 1, 1, 1, 1, 1, 1))
-        schedule.every(month_days_count).days.at("12:00").do(partial(month_notification_text, chat_id, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+        schedule.every().day.at("12:00").do(partial(send_day_notification, chat_id))
+        schedule.every(month_days_count).days.at("12:00").do(partial(send_month_notification, chat_id),
                                                              update_month_days_count)
-        schedule.every(year_days_count).days.at("12:00").do(partial(year_notification_text, chat_id, 1, 1, 1),
+        schedule.every(year_days_count).days.at("12:00").do(partial(send_year_notification, chat_id),
                                                             update_year_days_count)
         schedule.every().day.at("12:00").do(partial(check_season_notification, chat_id))
     Thread(target=schedule_checker).start()

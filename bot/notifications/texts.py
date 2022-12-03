@@ -1,5 +1,5 @@
 from bot.config import *
-from parse_data import load_fire_data
+from bot.parse_data import load_fire_data
 import datetime
 
 
@@ -47,9 +47,9 @@ def now_extinguished_notification_text(number, place, area, date, time, duration
 
 def get_summary_of_the_time(days: int):
     data = load_fire_data([("bot/extra_data/yasen_06_2022_getFireInformationResponse.json",
-                           "bot/extra_data/yasen_06_2022_getDynamicsResponse.json"),
-                          ("bot/extra_data/yasen_07_2022_getFireInformationResponse.json",
-                           "bot/extra_data/yasen_07_2022_getDynamicsResponse.json")])
+                            "bot/extra_data/yasen_06_2022_getDynamicsResponse.json"),
+                           ("bot/extra_data/yasen_07_2022_getFireInformationResponse.json",
+                            "bot/extra_data/yasen_07_2022_getDynamicsResponse.json")])
     fires_count = 0
     sum_area = 0
     for _, value in data.items():
@@ -66,14 +66,33 @@ def get_summary_of_the_day():
     fires_count, sum_area = get_summary_of_the_time(1)
     return f'Возникло пожаров за последние сутки: {fires_count} шт., площадью {sum_area} га.'
 
+
 def get_summary_of_the_season():
     fires_count, sum_area = get_summary_of_the_time(90)
     return f'Возникло пожаров за последнюю неделю: {fires_count} шт., площадью {sum_area} га.'
+
 
 def get_summary_of_the_month():
     fires_count, sum_area = get_summary_of_the_time(30)
     return f'Возникло пожаров за последний месяц: {fires_count} шт., площадью {sum_area} га.'
 
+
 def get_summary_of_the_year():
     fires_count, sum_area = get_summary_of_the_time(365)
     return f'Возникло пожаров за последний год: {fires_count} шт., площадью {sum_area} га.'
+
+
+def send_day_notification(chat_id):
+    bot.send_message(chat_id=chat_id, text=get_summary_of_the_day())
+
+
+def send_season_notification(chat_id):
+    bot.send_message(chat_id=chat_id, text=get_summary_of_the_season())
+
+
+def send_month_notification(chat_id):
+    bot.send_message(chat_id=chat_id, text=get_summary_of_the_month())
+
+
+def send_year_notification(chat_id):
+    bot.send_message(chat_id=chat_id, text=get_summary_of_the_year())
