@@ -1,6 +1,8 @@
 from telebot import types
 from bot.config import *
 from bot.interfaces.menues.main import show_main_menu
+from bot.utils import get_db
+from bot.crud.crud_user import user
 
 button_titles = {
     'count': ["Количество", False],
@@ -47,6 +49,8 @@ def handle_buttons_toggling(message):
         else:
             select_chart_menu(message)
         return
+    db = next(get_db())
+    user_obj = user.get(db=db, chat_id=message.chat.id)
     for key, values in button_titles.items():
         if values[0] == message.text.replace(' ✅', ''):
             button_titles[key][1] = not button_titles[key][1]
@@ -62,3 +66,4 @@ def show_charts_menu(message, text='Какие должны быть данны�
     markup.add("Назад")
     bot.send_message(message.chat.id, text, reply_markup=markup)
     bot.register_next_step_handler(message, handle_buttons_toggling)
+
