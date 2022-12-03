@@ -18,7 +18,7 @@ def handle_help(message):
 
 @bot.message_handler(state="*", commands=['get_day_info'])
 def handle_help(message):
-    bot.send_message(message.chat.id, get_summary_of_the_month())
+    bot.send_message(message.chat.id, get_summary_of_the_day())
 
 
 @bot.message_handler(state="*", commands=['get_month_info'])
