@@ -6,7 +6,12 @@ authors = ["Fizic <kirya.firsov.04@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "3.10"
+python = "^3.10"
+pytelegrambotapi = "^4.8.0"
+sqlalchemy = "^1.4.44"
+python-dotenv = "^0.21.0"
+pydantic = {extras = ["email"], version = "^1.10.2"}
+alembic = "^1.8.1"
 
 
 [build-system]
