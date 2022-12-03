@@ -1,4 +1,6 @@
 from bot.config import *
+
+
 def day_notification(chat_id,
                      fires_count: int,
                      sum_area: float,
