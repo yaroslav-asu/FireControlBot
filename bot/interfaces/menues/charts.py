@@ -4,8 +4,6 @@ from telebot import types
 from bot.config import *
 from bot.interfaces.menues.main import show_main_menu
 from telebot.types import ReplyKeyboardRemove
-from bot.utils import get_db
-from bot.crud.crud_user import user
 
 button_titles = {
     'count': ["🫘 Количество", False],
@@ -32,9 +30,8 @@ def handle_select_fire_period(message):
 @bot.message_handler(state=UserState.select_chart_menu)
 def handle_chart_select(message):
     if message.text == '⬅️ Назад':
-        show_charts_menu(message, )
+        show_charts_menu(message)
     else:
-        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
         bot.send_message(message.chat.id,
                          "Введите даты, данные за которые вы хотите получить в формате: дд.мм.гггг - дд.мм.гггг",
                          reply_markup=ReplyKeyboardRemove())

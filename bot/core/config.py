@@ -1,10 +1,8 @@
 import logging
 import pathlib
-import sys
 
 from dotenv import load_dotenv
-from pydantic import AnyHttpUrl, BaseSettings, EmailStr, validator
-from typing import List, Optional, Union
+from pydantic import BaseSettings, EmailStr
 
 load_dotenv()
 
