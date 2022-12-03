@@ -49,8 +49,6 @@ def handle_buttons_toggling(message):
         else:
             select_chart_menu(message)
         return
-    db = next(get_db())
-    user_obj = user.get(db=db, chat_id=message.chat.id)
     for key, values in button_titles.items():
         if values[0] == message.text.replace(' ✅', ''):
             button_titles[key][1] = not button_titles[key][1]
