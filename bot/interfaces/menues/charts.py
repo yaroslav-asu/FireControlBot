@@ -1,6 +1,9 @@
+from datetime import datetime
+
 from telebot import types
 from bot.config import *
 from bot.interfaces.menues.main import show_main_menu
+from telebot.types import ReplyKeyboardRemove
 from bot.utils import get_db
 from bot.crud.crud_user import user
 
@@ -12,18 +15,30 @@ button_titles = {
 }
 
 
+@bot.message_handler(state=UserState.chart_type)
 def handle_select_fire_period(message):
-    pass
-
-
-def select_fires_period(message):
-    pass
+    try:
+        print(message.text.split(' - '))
+        first_date, second_date = map(lambda x: datetime.strptime(x, "%d.%m.%Y").date(), message.text.split(' - '))
+        bot.send_message(message.chat.id,
+                         "Отлично, осталось только подождать, пока загрузятся диаграммы")
+        bot.set_state(message.from_user.id, UserState.select_fires_period, message.chat.id)
+    except Exception as e:
+        bot.send_message(message.chat.id,
+                         "Что-то пошло не так, попробуйте еще раз")
+        print(e)
 
 
 @bot.message_handler(state=UserState.select_chart_menu)
 def handle_chart_select(message):
     if message.text == 'Назад':
         show_charts_menu(message, )
+    else:
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        bot.send_message(message.chat.id,
+                         "Введите даты, данные за которые вы хотите получить в формате: дд.мм.гггг - дд.мм.гггг",
+                         reply_markup=ReplyKeyboardRemove())
+        bot.set_state(message.from_user.id, UserState.chart_type, message.chat.id)
 
 
 def select_chart_menu(message):

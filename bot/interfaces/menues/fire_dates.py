@@ -1,10 +1,7 @@
 from telebot import types
 from bot.config import *
 from bot.interfaces.menues.main import show_main_menu
-from bot.notifications.day import day_notification_text
-from bot.notifications.month import month_notification_text
-from bot.notifications.season import season_notification_text
-from bot.notifications.year import year_notification_text
+from bot.notifications.texts import day_notification_text, month_notification_text, year_notification_text, season_notification_text
 import pyttsx3
 import time
 tts = pyttsx3.init()
@@ -19,6 +16,7 @@ for voice in voices:
     if voice.name == 'Aleksandr':
         tts.setProperty('voice', voice.id)
 tts.setProperty("rate", 100)
+>>>>>>> bot/interfaces/menues/fire_dates.py
 
 
 def show_fires_statistic_period_menu(message):

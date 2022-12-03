@@ -20,6 +20,8 @@ class UserState(StatesGroup):
     charts_menu = State()
     # charts_data = Checkboxes()
     select_chart_menu = State()
+    chart_type = State()
+    select_fires_period = State()
 
 @bot.message_handler(state="*", commands=['cancel'])
 def any_state(message):
