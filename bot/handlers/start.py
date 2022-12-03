@@ -5,12 +5,13 @@ from bot.crud.crud_user import user
 from bot.utils import get_db
 from telebot import types
 
+
 # greeting handler functions
 @bot.message_handler(commands=['start'])
 def handle_start(message):
     db = next(get_db())
     usera = user.create(db=db, data={'chat_id': int(message.chat.id)})
-    _ = user.update(db=db,db_obj=usera, data={'chat_id': 123})
+    _ = user.update(db=db, db_obj=usera, data={'chat_id': 123})
     db.close()
     bot.send_message(message.chat.id, "Здравствуйте, я бот для оповедения о пожарной обстановке в ХМАО, "
                                       "я буду держать вас в курсе, о статусе всех   текущих пожарах, "
@@ -24,8 +25,9 @@ def handle_start(message):
     keyboard.add(button_geo)
     bot.send_message(message.chat.id, "Поделитесь местоположением", reply_markup=keyboard)
 
+
 @bot.message_handler(content_types=['location'])
-def location (message):
+def location(message):
     if message.location is not None:
         print(message.location)
     print(message)
