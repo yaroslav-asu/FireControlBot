@@ -6,6 +6,7 @@ from bot.utils import get_db
 from telebot import types
 from bot.models.user import User
 
+
 # greeting handler functions
 @bot.message_handler(commands=['start'])
 def handle_start(message):
@@ -27,8 +28,9 @@ def handle_start(message):
     keyboard.add(button_geo, button_skip)
     bot.send_message(message.chat.id, "Поделитесь местоположением", reply_markup=keyboard)
 
+
 @bot.message_handler(content_types=['location'])
-def location (message):
+def location(message):
     if message.location is not None:
         print(message.location)
     print(message)
