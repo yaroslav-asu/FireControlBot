@@ -1,4 +1,3 @@
-
 from typing import Any, Dict, Generic, List, Optional, Type, TypeVar, Union
 
 from pydantic import BaseModel
@@ -25,7 +24,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         return db.query(self.model).filter(self.model.id == id).first()
 
     def get_multi(
-        self, db: Session, *, skip: int = 0, limit: int = 5000
+            self, db: Session, *, skip: int = 0, limit: int = 5000
     ) -> List[ModelType]:
         return (
             db.query(self.model).order_by(self.model.id).offset(skip).limit(limit).all()
@@ -39,11 +38,11 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         return db_obj
 
     def update(
-        self,
-        db: Session,
-        *,
-        db_obj: ModelType,
-        data: dict
+            self,
+            db: Session,
+            *,
+            db_obj: ModelType,
+            data: dict
     ) -> ModelType:
         for field in data:
             if field in data:

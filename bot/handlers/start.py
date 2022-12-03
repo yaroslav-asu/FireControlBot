@@ -1,5 +1,5 @@
 from bot.config import *
-from bot.functions.help import show_help
+from bot.services.help import show_help
 from bot.interfaces.menues.main import show_main_menu
 from bot.crud.crud_user import user
 from bot.utils import get_db
@@ -23,8 +23,8 @@ def handle_start(message):
     show_help(message)
     bot.set_state(message.from_user.id, UserState.greeting, message.chat.id)
     keyboard = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
-    button_geo = types.KeyboardButton(text="Отправить местоположение", request_location=True)
-    keyboard.add(button_geo, "Пропустить")
+    button_geo = types.KeyboardButton(text="Отправить местоположение 📍", request_location=True)
+    keyboard.add(button_geo, "Пропустить ➡️")
     bot.send_message(message.chat.id, "Поделитесь местоположением", reply_markup=keyboard)
 
 

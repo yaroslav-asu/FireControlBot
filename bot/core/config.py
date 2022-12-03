@@ -1,16 +1,10 @@
-
 import logging
 import pathlib
-import sys
 
 from dotenv import load_dotenv
-from pydantic import AnyHttpUrl, BaseSettings, EmailStr, validator
-from typing import List, Optional, Union
-
-
+from pydantic import BaseSettings, EmailStr
 
 load_dotenv()
-
 
 # Project Directories
 ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -42,5 +36,6 @@ class Settings(BaseSettings):
         case_sensitive = True
         env_file = ".env"
         env_file_encoding = "utf-8"
+
 
 settings = Settings()

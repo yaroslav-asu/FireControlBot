@@ -6,12 +6,14 @@ from typing import Sequence
 class UserBase(BaseModel):
     pass
 
+
 class UserCreate(UserBase):
     chat_id: int
     count: bool = False
     causes: bool = False
     area: bool = False
     time: bool = False
+
 
 class UserUpdate(UserBase):
     id: int
@@ -23,6 +25,7 @@ class UserUpdate(UserBase):
 
 class UserUpdateRestricted(BaseModel):
     id: int
+
 
 # Properties shared by models stored in DB
 class UserInDBBase(UserBase):

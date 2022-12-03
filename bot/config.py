@@ -12,7 +12,6 @@ class UserState(StatesGroup):
     main_menu = State()
     fire_statistic_menu = State()
     charts_menu = State()
-    # charts_data = Checkboxes()
     select_chart_menu = State()
     chart_type = State()
     select_fires_period = State()

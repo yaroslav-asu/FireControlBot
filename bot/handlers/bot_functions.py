@@ -1,7 +1,8 @@
 from bot.config import *
-from bot.functions.help import show_help
+from bot.services.help import show_help
 
-from bot.notifications.texts import get_summary_of_the_day
+from bot.notifications.texts import get_summary_of_the_day, get_summary_of_the_month, get_summary_of_the_year, \
+    get_summary_of_the_season
 
 
 # greeting handler functions
@@ -18,22 +19,22 @@ def handle_help(message):
 
 @bot.message_handler(state="*", commands=['get_day_info'])
 def handle_help(message):
-    bot.send_message(message.chat.id, get_summary_of_the_day())
+    bot.send_message(message.chat.id, get_summary_of_the_month())
 
 
 @bot.message_handler(state="*", commands=['get_month_info'])
 def handle_help(message):
-    bot.send_message(message.chat.id, get_summary_of_the_day())
+    bot.send_message(message.chat.id, get_summary_of_the_month())
 
 
 @bot.message_handler(state="*", commands=['get_year_info'])
 def handle_help(message):
-    bot.send_message(message.chat.id, get_summary_of_the_day())
+    bot.send_message(message.chat.id, get_summary_of_the_year())
 
 
 @bot.message_handler(state="*", commands=['get_season_info'])
 def handle_help(message):
-    bot.send_message(message.chat.id, get_summary_of_the_day())
+    bot.send_message(message.chat.id, get_summary_of_the_season())
 
 
 @bot.message_handler(state="*", commands=['get_chart'])
