@@ -1,5 +1,5 @@
 from telebot import types
-from bot.config import *
+from bot.core.config import *
 
 
 def show_main_menu(message):

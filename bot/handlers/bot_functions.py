@@ -1,4 +1,4 @@
-from bot.config import *
+from bot.core.config import *
 from bot.services.help import show_help
 
 from bot.notifications.texts import get_summary_of_the_day, get_summary_of_the_month, get_summary_of_the_year, \
@@ -11,7 +11,6 @@ def handle_help(message):
     show_help(message)
 
 
-# TODO change functions code
 @bot.message_handler(state="*", commands=['get_current_fires'])
 def handle_help(message):
     bot.send_message(message.chat.id, get_summary_of_the_day())

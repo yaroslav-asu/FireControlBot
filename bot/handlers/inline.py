@@ -1,4 +1,4 @@
-from bot.config import *
+from bot.core.config import *
 from telebot import types
 import bot.notifications.texts as texts
 

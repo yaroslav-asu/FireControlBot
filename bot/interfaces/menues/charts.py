@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from telebot import types
-from bot.config import *
+from bot.core.config import *
 from bot.interfaces.menues.main import show_main_menu
 from telebot.types import ReplyKeyboardRemove
 

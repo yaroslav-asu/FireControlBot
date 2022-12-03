@@ -1,26 +1,33 @@
+import telebot
 import logging
 import pathlib
-
-from dotenv import load_dotenv
+from dotenv import dotenv_values
+from telebot.handler_backends import StatesGroup, State
 from pydantic import BaseSettings, EmailStr
 
-load_dotenv()
+config = dotenv_values('.env')
+bot = telebot.TeleBot(config['TOKEN'])
+
+
+class UserState(StatesGroup):
+    greeting = State()
+    location = State()
+    main_menu = State()
+    fire_statistic_menu = State()
+    charts_menu = State()
+    select_chart_menu = State()
+    chart_type = State()
+    select_fires_period = State()
+
 
 # Project Directories
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 
 
-class EmailSettings(BaseSettings):
-    MAILGUN_API_KEY: str = "update me"
-    MAILGUN_DOMAIN_NAME: str = "update me"
-    MAILGUN_BASE_URL: str = "https://api.mailgun.net/v3/"
-    SEND_REGISTRATION_EMAILS: bool = True
-
-
 class DBSettings(BaseSettings):
-    SQLALCHEMY_DATABASE_URI: str = "sqlite:///bot.db"
-    FIRST_SUPERUSER: EmailStr = "admin@cypher.com"
-    FIRST_SUPERUSER_PW: str = "CHANGEME"
+    SQLALCHEMY_DATABASE_URI: str = config['SQLALCHEMY_DATABASE_URI']
+    FIRST_SUPERUSER: EmailStr = config['FIRST_SUPERUSER']
+    FIRST_SUPERUSER_PW: str = config['FIRST_SUPERUSER_PW']
 
 
 class LoggingSettings(BaseSettings):
@@ -29,7 +36,6 @@ class LoggingSettings(BaseSettings):
 
 class Settings(BaseSettings):
     db: DBSettings = DBSettings()
-    email: EmailSettings = EmailSettings()
     logging: LoggingSettings = LoggingSettings()
 
     class Config:

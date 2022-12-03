@@ -1,4 +1,4 @@
-from bot.config import *
+from bot.core.config import *
 
 available_functions = {
     'start': 'Начало работы',

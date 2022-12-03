@@ -8,7 +8,7 @@ from calendar import monthrange
 from datetime import datetime
 from datetime import date
 from bot.crud.crud_user import user
-from bot.utils import get_db
+from bot.core.utils import get_db
 
 month_days_count = -1
 year_days_count = -1

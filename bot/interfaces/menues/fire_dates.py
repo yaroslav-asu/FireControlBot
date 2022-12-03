@@ -1,5 +1,5 @@
 from telebot import types
-from bot.config import *
+from bot.core.config import *
 from bot.interfaces.menues.main import show_main_menu
 import pyttsx3
 import time
@@ -16,7 +16,7 @@ tts.setProperty('voice', 'ru')
 for voice in voices:
     if voice.name == 'Aleksandr':
         tts.setProperty('voice', voice.id)
-tts.setProperty("rate", 100)
+tts.setProperty("rate", 150)
 
 
 def show_fires_statistic_period_menu(message):

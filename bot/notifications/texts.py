@@ -1,4 +1,4 @@
-from bot.config import *
+from bot.core.config import *
 from bot.parse_data import load_fire_data
 import datetime
 
