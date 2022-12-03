@@ -64,24 +64,60 @@ def get_summary_of_the_time(days: int):
     return fires_count, round(sum_area, 2)
 
 
+def get_active_fires_count():
+    data = load_fire_data([("bot/extra_data/yasen_06_2022_getFireInformationResponse.json",
+                            "bot/extra_data/yasen_06_2022_getDynamicsResponse.json"),
+                           ("bot/extra_data/yasen_07_2022_getFireInformationResponse.json",
+                            "bot/extra_data/yasen_07_2022_getDynamicsResponse.json")])
+    fires_count = 0
+    sum_area = 0
+    for _, value in data.items():
+        if value['date_start'] is None or value['date_finish'] is not None:
+            continue
+        if (datetime.datetime.now() - value['date_start']).total_seconds() < 0:
+            continue
+        if (datetime.datetime.now() - value['date_start']).total_seconds() > 0 > (
+                datetime.datetime.now() - value['date_start']).total_seconds():
+            fires_count += 1
+            if value['area'] is not None:
+                sum_area += value['area']
+    return fires_count, round(sum_area, 2)
+
+
 def get_summary_of_the_day():
-    fires_count, sum_area = get_summary_of_the_time(1)
-    return f'Возникло пожаров за последние сутки: {fires_count} шт., площадью {sum_area} га.'
+    fires_count_start, sum_area_start = get_summary_of_the_time(1)
+    fires_count_progress, sum_area_progress = get_active_fires_count()
+    return f'Возникло пожаров за последние сутки: {fires_count_start} шт., площадью {sum_area_start} га.\n' \
+           f'Действует пожаров: {fires_count_progress} площадью {sum_area_progress} га.\n' \
+           f'{datetime.datetime.now().strftime("%d.%m.%Y")} {datetime.datetime.now().strftime("%H:%M")}'
 
 
 def get_summary_of_the_season():
     fires_count, sum_area = get_summary_of_the_time(90)
-    return f'Возникло пожаров за последнюю неделю: {fires_count} шт., площадью {sum_area} га.'
+    fires_count_progress, sum_area_progress = get_active_fires_count()
+    return f'Возникло пожаров за последнюю неделю: {fires_count} шт., площадью {sum_area} га.' \
+           f'Действует пожаров: {fires_count_progress} площадью {sum_area_progress} га.\n' \
+           f'{datetime.datetime.now().strftime("%d.%m.%Y")} {datetime.datetime.now().strftime("%H:%M")}'
 
 
 def get_summary_of_the_month():
     fires_count, sum_area = get_summary_of_the_time(30)
-    return f'Возникло пожаров за последний месяц: {fires_count} шт., площадью {sum_area} га.'
+    fires_count_progress, sum_area_progress = get_active_fires_count()
+    return f'Возникло пожаров за последний месяц: {fires_count} шт., площадью {sum_area} га.' \
+           f'Действует пожаров: {fires_count_progress} площадью {sum_area_progress} га.\n' \
+           f'{datetime.datetime.now().strftime("%d.%m.%Y")} {datetime.datetime.now().strftime("%H:%M")}'
 
 
 def get_summary_of_the_year():
     fires_count, sum_area = get_summary_of_the_time(365)
-    return f'Возникло пожаров за последний год: {fires_count} шт., площадью {sum_area} га.'
+    fires_count_progress, sum_area_progress = get_active_fires_count()
+    return f'Возникло пожаров за последний год: {fires_count} шт., площадью {sum_area} га.' \
+           f'Действует пожаров: {fires_count_progress} площадью {sum_area_progress} га.\n' \
+           f'{datetime.datetime.now().strftime("%d.%m.%Y")} {datetime.datetime.now().strftime("%H:%M")}'
+
+
+def get_change_state_fire(type: str, locality: str, area: int, state: str) -> str:
+    return f'{type} {locality} площадь {area} {state}'
 
 
 def send_day_notification(chat_id):
@@ -98,3 +134,7 @@ def send_month_notification(chat_id):
 
 def send_year_notification(chat_id):
     bot.send_message(chat_id=chat_id, text=get_summary_of_the_year())
+
+
+def fire_state_change_notification(chat_id):
+    bot.send_message(chat_id=chat_id, text=get_change_state_fire)

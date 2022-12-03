@@ -50,4 +50,6 @@ def setup_notifications():
         schedule.every(year_days_count).days.at("12:00").do(partial(send_year_notification, chat_id),
                                                             update_year_days_count)
         schedule.every().day.at("12:00").do(partial(check_season_notification, chat_id))
+
+    db.close()
     Thread(target=schedule_checker).start()
