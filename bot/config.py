@@ -6,14 +6,8 @@ config = dotenv_values('.env')
 bot = telebot.TeleBot(config['TOKEN'])
 
 
-# class Checkboxes(StatesGroup):
-#     count = State()
-#     causes = State()
-#     area = State()
-#     time = State()
-
-
 class UserState(StatesGroup):
+    greeting = State()
     location = State()
     main_menu = State()
     fire_statistic_menu = State()
@@ -22,10 +16,3 @@ class UserState(StatesGroup):
     select_chart_menu = State()
     chart_type = State()
     select_fires_period = State()
-
-@bot.message_handler(state="*", commands=['cancel'])
-def any_state(message):
-    """
-    Cancel state
-    """
-    bot.send_message(message.chat.id, "Your state was cancelled.")

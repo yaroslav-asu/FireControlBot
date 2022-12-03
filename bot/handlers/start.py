@@ -21,20 +21,25 @@ def handle_start(message):
                                       "году и пожароопасном сезоне"
                      )
     show_help(message)
-    get_location(message)
-
-
-def get_location(message):
+    bot.set_state(message.from_user.id, UserState.greeting, message.chat.id)
     keyboard = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
     button_geo = types.KeyboardButton(text="Отправить местоположение", request_location=True)
-    button_skip = types.KeyboardButton(text="Пропустить")
-    keyboard.add(button_geo, button_skip)
+    keyboard.add(button_geo, "Пропустить")
     bot.send_message(message.chat.id, "Поделитесь местоположением", reply_markup=keyboard)
+
+
+@bot.message_handler(state=UserState.greeting, content_types=['location'])
+def get_location(message):
+    write_location(message)
+
+
+@bot.message_handler(state=UserState.greeting, content_types=['text'])
+def get_skip(message):
+    write_location(message)
+
+
+def write_location(message):
     bot.set_state(message.from_user.id, UserState.location, message.chat.id)
-
-
-@bot.message_handler(state=UserState.location)
-def location(message):
     with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
         data['location'] = message.location
     show_main_menu(message)
