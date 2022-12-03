@@ -16,8 +16,6 @@ for voice in voices:
     if voice.name == 'Aleksandr':
         tts.setProperty('voice', voice.id)
 tts.setProperty("rate", 100)
->>>>>>> bot/interfaces/menues/fire_dates.py
-
 
 def show_fires_statistic_period_menu(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)

@@ -2,10 +2,7 @@ import schedule
 from time import sleep
 from threading import Thread
 from functools import partial
-from bot.notifications.day import day_notification_text
-from bot.notifications.month import month_notification_text
-from bot.notifications.year import year_notification_text
-from bot.notifications.season import season_notification_text
+from bot.notifications.texts import day_notification_text,month_notification_text,year_notification_text,season_notification_text
 from calendar import monthrange
 from datetime import datetime
 from datetime import date
@@ -37,7 +34,7 @@ def update_year_days_count():
 def check_season_notification(chat_id):
     if datetime.now().month == 3:
         # TODO add args
-        season_notification_text(chat_id, 1, 1, 1, 1)
+        season_notification_text(chat_id, 1, 1, 1)
 
 
 def setup_notifications():
