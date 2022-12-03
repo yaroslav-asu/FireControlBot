@@ -55,7 +55,7 @@ def load_fire_data(files):
 
 
 if __name__ == "__main__":
-    print(load_fire_data([("C:/Users/artyo/Desktop/yasen_06_2022_getFireInformationResponse.json",
-                           "C:/Users/artyo/Desktop/yasen_06_2022_getDynamicsResponse.json"),
-                          ("C:/Users/artyo/Desktop/yasen_07_2022_getFireInformationResponse.json",
-                           "C:/Users/artyo/Desktop/yasen_07_2022_getDynamicsResponse.json")]))
+    print(load_fire_data([("./extra_data/yasen_06_2022_getFireInformationResponse.json",
+                           "./extra_data/yasen_06_2022_getDynamicsResponse.json"),
+                          ("./extra_data/yasen_07_2022_getFireInformationResponse.json",
+                           "./extra_data/yasen_07_2022_getDynamicsResponse.json")]))
