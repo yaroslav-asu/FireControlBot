@@ -55,6 +55,8 @@ def get_summary_of_the_time(days: int):
     for _, value in data.items():
         if value['date_start'] is None:
             continue
+        if (datetime.datetime.now() - value['date_start']).total_seconds() < 0:
+            continue
         if (datetime.datetime.now() - value['date_start']) < datetime.timedelta(days=days):
             fires_count += 1
             if value['area'] is not None:
