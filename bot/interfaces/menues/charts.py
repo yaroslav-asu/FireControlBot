@@ -5,6 +5,7 @@ from bot.core.config import *
 from bot.heatmap.heatmap_generator import show_heat_map
 from bot.interfaces.menues.main import show_main_menu
 from telebot.types import ReplyKeyboardRemove
+from bot.plot_preparing.prepare_plots import build_linear_plot, build_pie_chart
 
 button_titles = {
     'count': ["Количество", False],
@@ -17,10 +18,20 @@ button_titles = {
 @bot.message_handler(state=UserState.chart_type)
 def handle_select_fire_period(message):
     try:
-        first_date, second_date = map(lambda x: datetime.strptime(x, "%d.%m.%Y").date(), message.text.split(' - '))
+        first_date, second_date = message.text.split(' - ')
+        first_date = datetime.strptime(first_date, "%d.%m.%Y")
+        second_date = datetime.strptime(second_date, "%d.%m.%Y")
+        # first_date, second_date = map(lambda x: datetime.strptime(x, "%d.%m.%Y"), message.text.split(' - '))
         bot.send_message(message.chat.id,
                          "Отлично, осталось только подождать, пока загрузятся диаграммы")
         bot.set_state(message.from_user.id, UserState.select_fires_period, message.chat.id)
+        with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
+            match data["chart_type"]:
+                case "Линейная":
+                    img = build_linear_plot(data["chart_data"], first_date, second_date)
+                case "Круговая":
+                    img = build_pie_chart(data["chart_data"], first_date, second_date)
+            bot.send_photo(message.from_user.id, img)
     except Exception as e:
         bot.send_message(message.chat.id,
                          "Что-то пошло не так, попробуйте еще раз")
