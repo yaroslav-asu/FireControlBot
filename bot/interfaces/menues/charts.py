@@ -7,11 +7,12 @@ from bot.interfaces.menues.main import show_main_menu
 from telebot.types import ReplyKeyboardRemove
 from bot.plot_preparing.prepare_plots import build_linear_plot, build_pie_chart
 
-button_titles = {
-    'count': ["Количество", False],
-    'causes': ["Причины", False],
-    'area': ["Площадь", False],
-    'time': ["Среднее время", False],
+button_titles = ['Количество', 'Причины', 'Площадь', 'Среднее время']
+sl = {
+    'Количество': 'count',
+    'Причины': 'causes',
+    'Площадь': 'area',
+    'Среднее время': 'time',
 }
 
 
@@ -31,15 +32,10 @@ def handle_select_fire_period(message):
             match data["chart_type"]:
                 case "Линейная":
                     img = build_linear_plot(data["chart_data"], first_date, second_date)
-                case "Круговая":
-                    img = build_pie_chart(data["chart_data"], first_date, second_date)
             bot.send_photo(message.from_user.id, img)
+            data["chart_data"] = set()
             show_main_menu(message)
     except Exception as e:
-        # first_date, second_date = message.text.split(' - ')
-        # first_date = datetime.strptime(first_date, "%d.%m.%Y")
-        # second_date = datetime.strptime(second_date, "%d.%m.%Y")
-        # print(first_date, second_date)
         bot.send_message(message.chat.id,
                          "Что-то пошло не так, попробуйте еще раз")
         print(e)
@@ -71,43 +67,41 @@ def show_select_chart_menu(message):
 @bot.message_handler(state=UserState.charts_menu)
 def handle_buttons_toggling(message):
     message_text = message.text.replace(' ✅', '')
-    with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
-        data['charts_menu'] = True
     if message.text == '⬅️ Назад':
         show_main_menu(message)
         return
     elif message.text == 'Далее ➡️':
         selected_at_least_one = False
-        for key, values in button_titles.items():
-            if values[1]:
-                selected_at_least_one = True
+        with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
+            for title in button_titles:
+                if title in data['chart_data']:
+                    selected_at_least_one = True
         if not selected_at_least_one:
             show_charts_menu(message, 'Нужно обязательно что-то выбрать!')
         else:
             show_select_chart_menu(message)
         return
-    for key, values in button_titles.items():
-        if values[0] == message_text:
+    for title in button_titles:
+        if title == message_text:
             with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
-                if 'chart_data' not in data.keys():
-                    data['chart_data'] = {message_text, }
+                if message_text in data['chart_data']:
+                    data['chart_data'].remove(message_text)
                 else:
-                    if message_text in data['chart_data']:
-                        data['chart_data'].remove(message_text)
-                    else:
-                        data['chart_data'].add(message_text)
-            button_titles[key][1] = not button_titles[key][1]
+                    data['chart_data'].add(message_text)
+                print(data['chart_data'])
+            # button_titles[key][1] = not button_titles[key][1]
     show_charts_menu(message, 'Еще что то?')
 
 
 def show_charts_menu(message, text='Какие должны быть данные'):
     with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
-        data['charts_menu'] = message.text
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    titles = [f"{button_titles[title][0]} {'✅' if button_titles[title][1] else ''}" for title in button_titles.keys()]
-    markup.row(titles[0], titles[1])
-    markup.row(titles[2], titles[3])
-    markup.add("Далее ➡️")
-    markup.add("⬅️ Назад")
-    bot.send_message(message.chat.id, text, reply_markup=markup)
-    bot.set_state(message.from_user.id, UserState.charts_menu, message.chat.id)
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        for title in button_titles:
+            print(title, data['chart_data'])
+        titles = [f"{title} {'✅' if title in data['chart_data'] else ''}" for title in button_titles]
+        markup.row(titles[0], titles[1])
+        markup.row(titles[2], titles[3])
+        markup.add("Далее ➡️")
+        markup.add("⬅️ Назад")
+        bot.send_message(message.chat.id, text, reply_markup=markup)
+        bot.set_state(message.from_user.id, UserState.charts_menu, message.chat.id)

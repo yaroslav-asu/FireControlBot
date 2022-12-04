@@ -38,6 +38,8 @@ def handle_start(message):
         data['audio_messages'] = False
         data['heat_map'] = False
 
+        data['chart_data'] = set()
+
 
 @bot.message_handler(state=UserState.greeting, content_types=['location'])
 def get_location(message):
