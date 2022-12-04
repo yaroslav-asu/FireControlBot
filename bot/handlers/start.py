@@ -32,6 +32,10 @@ def handle_start(message):
     bot.send_message(message.chat.id, "Для получения всех возможностей бота предоставьте доступ к местоположению",
                      reply_markup=keyboard)
 
+    with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
+        data['text_messages'] = True
+        data['audio_messages'] = True
+
 
 @bot.message_handler(state=UserState.greeting, content_types=['location'])
 def get_location(message):
