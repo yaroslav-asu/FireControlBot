@@ -23,7 +23,7 @@ def show_fires_statistic_period_menu(message, buttons_state=None):
 
 
 def send_audio(message, text):
-    bot.send_message(message.chat.id, "Подождите, аудиосообщение уже загружается")
+    waiting_message = bot.send_message(message.chat.id, "Подождите, аудиосообщение уже загружается")
     tts = pyttsx3.init()
 
     voices = tts.getProperty('voices')
@@ -40,6 +40,14 @@ def send_audio(message, text):
     tts.runAndWait()
     time.sleep(5)
     bot.send_audio(message.chat.id, open('fire_information.mp3', 'rb'))
+    time.sleep(0.5)
+    for i in range(10):
+        try:
+            bot.delete_message(message.chat.id, waiting_message.id)
+            break
+        except Exception as e:
+            time.sleep(i)
+
 
 
 @bot.message_handler(state=UserState.fire_statistic_menu)
