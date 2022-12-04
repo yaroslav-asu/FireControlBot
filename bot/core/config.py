@@ -18,6 +18,7 @@ class UserState(StatesGroup):
     select_chart_menu = State()
     chart_type = State()
     select_fires_period = State()
+    alert = State()
 
 
 # Project Directories

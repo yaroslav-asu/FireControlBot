@@ -52,20 +52,27 @@ def load_fire_data(files):
                     date_finish = datetime.strptime(fire["detection"], "%d.%m.%Y %H:%M")
 
             fire_info[fire["fireIdField"]]["date_finish"] = date_finish
-    fire_info['custom'] = {'area': 7,
-                           'cause': 'от гроз',
+    fire_info['custom'] = {'area': 1,
+                           'cause': 'человеческий фактор',
                            'coordinates': {'latitude': 59.931878,
                                            'longitude': 30.321922},
                            'date_finish': None,
                            'date_start': datetime(2022, 12, 4, 1, 30),
-                           'municipality': 'с Болчары'}
+                           'municipality': 'г. Санкт-Петербург'}
+    fire_info['custom1'] = {'area': 3,
+                            'cause': 'от гроз',
+                            'coordinates': {'latitude': 54.722416,
+                                            'longitude': 20.539976},
+                            'date_finish': None,
+                            'date_start': datetime(2022, 12, 4, 1, 30),
+                            'municipality': 'г. Калининград'}
     fire_info['custom1'] = {'area': 7,
-                           'cause': 'от гроз',
-                           'coordinates': {'latitude': 54.722416,
-                                           'longitude': 20.539976},
-                           'date_finish': None,
-                           'date_start': datetime(2022, 12, 4, 1, 30),
-                           'municipality': 'с Болчары'}
+                            'cause': 'возгарание бензина',
+                            'coordinates': {'latitude': 61.019397,
+                                            'longitude': 69.085829},
+                            'date_finish': None,
+                            'date_start': datetime(2022, 12, 4, 1, 30),
+                            'municipality': 'г. Ханты-Мансийск'}
     return fire_info
 
 
