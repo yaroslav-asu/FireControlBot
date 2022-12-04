@@ -41,7 +41,7 @@ def send_audio(message, text):
 
     tts.save_to_file(text, 'fire_information.mp3')
     tts.runAndWait()
-    time.sleep(5)
+    time.sleep(3)
     bot.send_audio(message.chat.id, open('fire_information.mp3', 'rb'))
     time.sleep(0.5)
     for i in range(10):
@@ -50,7 +50,6 @@ def send_audio(message, text):
             break
         except Exception as e:
             time.sleep(i)
-
 
 
 @bot.message_handler(state=UserState.fire_statistic_menu)
@@ -62,41 +61,50 @@ def handle_fires_statistic_period(message):
                 bot.send_message(message.chat.id, texts.get_summary_of_the_day())
             if data['audio_messages']:
                 send_audio(message, texts.get_summary_of_the_day())
+            if data['heat_map']:
+                show_heat_map(message, 'day')
         elif message.text == 'За месяц 🗓️':
             if data['text_messages']:
                 bot.send_message(message.chat.id, texts.get_summary_of_the_month())
             if data['audio_messages']:
                 send_audio(message, texts.get_summary_of_the_month())
             if data['heat_map']:
-                show_heat_map(message, )
+                show_heat_map(message, 'month')
         elif message.text == 'За год 🌲':
             if data['text_messages']:
                 bot.send_message(message.chat.id, texts.get_summary_of_the_year())
             if data['audio_messages']:
                 send_audio(message, texts.get_summary_of_the_year())
+            if data['heat_map']:
+                show_heat_map(message, 'year')
         elif message.text == 'За пожароопасный сезон 🍂':
             if data['text_messages']:
                 bot.send_message(message.chat.id, texts.get_summary_of_the_season())
             if data['audio_messages']:
                 send_audio(message, texts.get_summary_of_the_season())
+            if data['heat_map']:
+                show_heat_map(message, 'year')
         elif message.text[:-2] == 'Текст' or message.text == 'Текст':
             if data['text_messages'] or data['heat_map'] or data['audio_messages']:
                 data['text_messages'] = not data['text_messages']
-                show_fires_statistic_period_menu(message, [data['text_messages'], data['audio_messages'], data['heat_map']])
+                show_fires_statistic_period_menu(message,
+                                                 [data['text_messages'], data['audio_messages'], data['heat_map']])
             else:
                 bot.send_message(message.chat.id, "Включите аудио сообщения для отключения текстовых")
         elif message.text[:-2] == 'Аудио' or message.text == 'Аудио':
             if data['text_messages'] or data['heat_map'] or data['audio_messages']:
                 data['audio_messages'] = not data['audio_messages']
-                show_fires_statistic_period_menu(message, [data['text_messages'], data['audio_messages'], data['heat_map']])
+                show_fires_statistic_period_menu(message,
+                                                 [data['text_messages'], data['audio_messages'], data['heat_map']])
             else:
                 bot.send_message(message.chat.id, "Включите текстовые сообщения для отключения аудиосообщений")
         elif message.text[:-2] == 'Карта' or message.text == 'Карта':
             if data['text_messages'] or data['heat_map'] or data['audio_messages']:
                 data['heat_map'] = not data['heat_map']
-                show_fires_statistic_period_menu(message, [data['text_messages'], data['audio_messages'], data['heat_map']])
+                show_fires_statistic_period_menu(message,
+                                                 [data['text_messages'], data['audio_messages'], data['heat_map']])
             else:
-                bot.send_message(message.chat.id, "Включите текстовые сообщения для отключения аудиосообщений")
+                bot.send_message(message.chat.id, "Включите текстовые сообщения для отключения аудио сообщений")
         elif message.text == '⬅️ Назад':
             del data['fire_statistic_menu']
             show_main_menu(message)
