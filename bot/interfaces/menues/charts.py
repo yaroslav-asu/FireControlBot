@@ -33,6 +33,10 @@ def handle_select_fire_period(message):
                     img = build_pie_chart(data["chart_data"], first_date, second_date)
             bot.send_photo(message.from_user.id, img)
     except Exception as e:
+        # first_date, second_date = message.text.split(' - ')
+        # first_date = datetime.strptime(first_date, "%d.%m.%Y")
+        # second_date = datetime.strptime(second_date, "%d.%m.%Y")
+        # print(first_date, second_date)
         bot.send_message(message.chat.id,
                          "Что-то пошло не так, попробуйте еще раз")
         print(e)
