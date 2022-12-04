@@ -63,7 +63,6 @@ def handle_chart_select(message):
 def show_select_chart_menu(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     markup.add("📈 Линейная")
-    markup.add("🍕 Круговая")
     markup.add("⬅️ Назад")
     bot.send_message(message.chat.id, "Веберите тип диараммы", reply_markup=markup)
     bot.set_state(message.from_user.id, UserState.select_chart_menu, message.chat.id)

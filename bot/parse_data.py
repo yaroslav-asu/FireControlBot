@@ -66,7 +66,7 @@ def load_fire_data(files):
                             'date_finish': None,
                             'date_start': datetime(2022, 12, 4, 1, 30),
                             'municipality': 'г. Калининград'}
-    fire_info['custom1'] = {'area': 7,
+    fire_info['custom2'] = {'area': 7,
                             'cause': 'возгарание бензина',
                             'coordinates': {'latitude': 61.019397,
                                             'longitude': 69.085829},
