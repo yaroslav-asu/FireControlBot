@@ -1,5 +1,6 @@
 from telebot import types
 from bot.core.config import *
+from bot.heatmap.heatmap_generator import show_heat_map
 from bot.interfaces.menues.main import show_main_menu
 import pyttsx3
 import time
@@ -13,10 +14,12 @@ def show_fires_statistic_period_menu(message, buttons_state=None):
     with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
         if not buttons_state:
             markup.row(f"Текст {'✅' if data['text_messages'] else ''}",
-                       f"Аудио {'✅' if data['audio_messages'] else ''}")
+                       f"Аудио {'✅' if data['audio_messages'] else ''}",
+                       f"Карта {'✅' if data['heat_map'] else ''}")
         else:
             markup.row(f"Текст {'✅' if buttons_state[0] else ''}",
-                       f"Аудио {'✅' if buttons_state[1] else ''}")
+                       f"Аудио {'✅' if buttons_state[1] else ''}",
+                       f"Карта {'✅' if buttons_state[2] else ''}")
     markup.add("⬅️ Назад")
     bot.send_message(message.chat.id, 'За какой период вы хотите узнать о пожарах?', reply_markup=markup)
     bot.set_state(message.from_user.id, UserState.fire_statistic_menu, message.chat.id)
@@ -64,6 +67,8 @@ def handle_fires_statistic_period(message):
                 bot.send_message(message.chat.id, texts.get_summary_of_the_month())
             if data['audio_messages']:
                 send_audio(message, texts.get_summary_of_the_month())
+            if data['heat_map']:
+                show_heat_map(message, )
         elif message.text == 'За год 🌲':
             if data['text_messages']:
                 bot.send_message(message.chat.id, texts.get_summary_of_the_year())
@@ -75,15 +80,21 @@ def handle_fires_statistic_period(message):
             if data['audio_messages']:
                 send_audio(message, texts.get_summary_of_the_season())
         elif message.text[:-2] == 'Текст' or message.text == 'Текст':
-            if data['audio_messages']:
+            if data['text_messages'] or data['heat_map'] or data['audio_messages']:
                 data['text_messages'] = not data['text_messages']
-                show_fires_statistic_period_menu(message, [data['text_messages'], data['audio_messages']])
+                show_fires_statistic_period_menu(message, [data['text_messages'], data['audio_messages'], data['heat_map']])
             else:
                 bot.send_message(message.chat.id, "Включите аудио сообщения для отключения текстовых")
         elif message.text[:-2] == 'Аудио' or message.text == 'Аудио':
-            if data['text_messages']:
+            if data['text_messages'] or data['heat_map'] or data['audio_messages']:
                 data['audio_messages'] = not data['audio_messages']
-                show_fires_statistic_period_menu(message, [data['text_messages'], data['audio_messages']])
+                show_fires_statistic_period_menu(message, [data['text_messages'], data['audio_messages'], data['heat_map']])
+            else:
+                bot.send_message(message.chat.id, "Включите текстовые сообщения для отключения аудиосообщений")
+        elif message.text[:-2] == 'Карта' or message.text == 'Карта':
+            if data['text_messages'] or data['heat_map'] or data['audio_messages']:
+                data['heat_map'] = not data['heat_map']
+                show_fires_statistic_period_menu(message, [data['text_messages'], data['audio_messages'], data['heat_map']])
             else:
                 bot.send_message(message.chat.id, "Включите текстовые сообщения для отключения аудиосообщений")
         elif message.text == '⬅️ Назад':

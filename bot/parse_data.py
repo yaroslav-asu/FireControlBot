@@ -2,6 +2,8 @@ from datetime import datetime
 from json import load
 from pprint import pprint
 
+from geopy import distance
+
 
 def load_fire_data(files):
     """
@@ -50,12 +52,25 @@ def load_fire_data(files):
                     date_finish = datetime.strptime(fire["detection"], "%d.%m.%Y %H:%M")
 
             fire_info[fire["fireIdField"]]["date_finish"] = date_finish
-
+    fire_info['custom'] = {'area': 7,
+                           'cause': 'от гроз',
+                           'coordinates': {'latitude': 59.931878,
+                                           'longitude': 30.321922},
+                           'date_finish': None,
+                           'date_start': datetime(2022, 12, 4, 1, 30),
+                           'municipality': 'с Болчары'}
+    fire_info['custom'] = {'area': 7,
+                           'cause': 'от гроз',
+                           'coordinates': {'latitude': 54.722416,
+                                           'longitude': 20.539976},
+                           'date_finish': None,
+                           'date_start': datetime(2022, 12, 4, 1, 30),
+                           'municipality': 'с Болчары'}
     return fire_info
 
 
 if __name__ == "__main__":
     pprint(load_fire_data([("./extra_data/yasen_06_2022_getFireInformationResponse.json",
-                           "./extra_data/yasen_06_2022_getDynamicsResponse.json"),
-                          ("./extra_data/yasen_07_2022_getFireInformationResponse.json",
-                           "./extra_data/yasen_07_2022_getDynamicsResponse.json")]))
+                            "./extra_data/yasen_06_2022_getDynamicsResponse.json"),
+                           ("./extra_data/yasen_07_2022_getFireInformationResponse.json",
+                            "./extra_data/yasen_07_2022_getDynamicsResponse.json")]))

@@ -1,3 +1,5 @@
+import time
+from datetime import datetime
 from pprint import pprint
 
 import pandas as pd
@@ -9,14 +11,17 @@ from bot.parse_data import load_fire_data
 
 
 def generate_heatmap():
+    today = datetime.today()
     quakes = list(filter(lambda y: y['Площадь'] and y['latitude'] and y['longitude'],
                          map(lambda x: {'latitude': x['coordinates']['latitude'],
                                         'longitude': x['coordinates']['longitude'],
                                         'Площадь': x['area']},
-                             load_fire_data([("bot/extra_data/yasen_06_2022_getFireInformationResponse.json",
-                                              "bot/extra_data/yasen_06_2022_getDynamicsResponse.json"),
-                                             ("bot/extra_data/yasen_07_2022_getFireInformationResponse.json",
-                                              "bot/extra_data/yasen_07_2022_getDynamicsResponse.json")]).values())))
+                             filter(lambda x: x['date_start'] and x['date_start'] and x['date_start'] and x[
+                                 'date_start'].year == today.year and x['date_start'].month == today.month,
+                                    load_fire_data([("bot/extra_data/yasen_06_2022_getFireInformationResponse.json",
+                                                     "bot/extra_data/yasen_06_2022_getDynamicsResponse.json"),
+                                                    ("bot/extra_data/yasen_07_2022_getFireInformationResponse.json",
+                                                     "bot/extra_data/yasen_07_2022_getDynamicsResponse.json")]).values()))))
 
     px.set_mapbox_access_token(
         config['TOKEN_MAPBOX']
@@ -35,8 +40,9 @@ def generate_heatmap():
 
 def show_heat_map(message):
     bot.send_message(message.chat.id, 'Пожалуйста, подождите, идет загрузка карты')
-    generate_heatmap()
+    time.sleep(2)
     bot.send_photo(message.chat.id, photo=open('bot/heatmap/map.png', 'rb'))
+
 
 if __name__ == "__main__":
     generate_heatmap()
