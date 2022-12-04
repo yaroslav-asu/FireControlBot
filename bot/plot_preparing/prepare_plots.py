@@ -82,7 +82,7 @@ def get_line(date_start, date_finish, label):
                         cnts[timeline[day]] += 1
 
     if (date_finish - date_start).days >= 21:
-        weeks_number = date_finish.isocalendar().week - date_start.isocalendar().week + 1
+        weeks_number = (date_finish - date_start).days // 7 + 1
         start_week = date_start.isocalendar().week
 
         weeks_res = [0 for _ in range(weeks_number)]
@@ -161,7 +161,7 @@ def plot_lines(date_start, date_finish, lines, contains_causes):
         fig.autofmt_xdate()
 
     else:
-        week_num = date_finish.isocalendar().week - date_start.isocalendar().week + 1
+        week_num = (date_finish - date_start).days // 7 + 1
         start_week = date_start.isocalendar().week
 
         fig, ax = plt.subplots()
