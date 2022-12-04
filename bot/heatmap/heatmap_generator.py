@@ -38,10 +38,10 @@ def generate_heatmap():
     fig.write_image("bot/heatmap/map.png")
 
 
-def show_heat_map(message):
+def show_heat_map(message, period: str):
     bot.send_message(message.chat.id, 'Пожалуйста, подождите, идет загрузка карты')
-    time.sleep(2)
-    bot.send_photo(message.chat.id, photo=open('bot/heatmap/map.png', 'rb'))
+    time.sleep(0.5)
+    bot.send_photo(message.chat.id, photo=open(f'bot/heatmap/{period}.png', 'rb'))
 
 
 if __name__ == "__main__":
