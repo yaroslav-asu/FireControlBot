@@ -19,6 +19,7 @@ pandas = "^1.5.2"
 kaleido = "0.2.1"
 matplotlib = "^3.6.2"
 seaborn = "^0.12.1"
+geopy = "^2.3.0"
 
 
 [build-system]

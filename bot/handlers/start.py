@@ -34,7 +34,8 @@ def handle_start(message):
 
     with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
         data['text_messages'] = True
-        data['audio_messages'] = True
+        data['audio_messages'] = False
+        data['heat_map'] = False
 
 
 @bot.message_handler(state=UserState.greeting, content_types=['location'])
