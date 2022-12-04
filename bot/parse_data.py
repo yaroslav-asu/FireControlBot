@@ -59,7 +59,7 @@ def load_fire_data(files):
                            'date_finish': None,
                            'date_start': datetime(2022, 12, 4, 1, 30),
                            'municipality': 'с Болчары'}
-    fire_info['custom'] = {'area': 7,
+    fire_info['custom1'] = {'area': 7,
                            'cause': 'от гроз',
                            'coordinates': {'latitude': 54.722416,
                                            'longitude': 20.539976},
