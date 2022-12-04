@@ -10,6 +10,7 @@ from bot.models.user import User
 # greeting handler functions
 @bot.message_handler(state="*", commands=['start'])
 def handle_start(message):
+    bot.delete_state(message.from_user.id, message.chat.id)
     logging.info(f'User {message.chat.id} started bot')
     # Регистрация пользователя
     db = next(get_db())
