@@ -17,7 +17,7 @@ def generate_heatmap():
                                         'longitude': x['coordinates']['longitude'],
                                         'Площадь': x['area']},
                              filter(lambda x: x['date_start'] and x['date_start'] and x['date_start'] and x[
-                                 'date_start'].year == today.year and x['date_start'].month == today.month,
+                                 'date_start'].year == today.year,
                                     load_fire_data([("bot/extra_data/yasen_06_2022_getFireInformationResponse.json",
                                                      "bot/extra_data/yasen_06_2022_getDynamicsResponse.json"),
                                                     ("bot/extra_data/yasen_07_2022_getFireInformationResponse.json",
@@ -35,7 +35,7 @@ def generate_heatmap():
     fig.update_layout(
         mapbox_style="mapbox://styles/yaroslav-asu/clb8e2nsa004n15oh1gge3igm"
     )
-    fig.write_image("bot/heatmap/map.png")
+    fig.write_image("bot/heatmap/year.png")
 
 
 def show_heat_map(message):
