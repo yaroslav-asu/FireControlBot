@@ -25,14 +25,12 @@ def generate_heatmap():
     fig = px.density_mapbox(quakes, lat="latitude", lon="longitude", z='Площадь', zoom=4, width=830, height=600,
                             center=dict(lat=62, lon=72.3),
                             color_continuous_scale=[(0, "yellow"), (0.5, "orange"), (1, "red")],
-
                             )
 
     fig.update_layout(
         mapbox_style="mapbox://styles/yaroslav-asu/clb8e2nsa004n15oh1gge3igm"
     )
     fig.write_image("bot/heatmap/map.png")
-    # fig.show()
 
 
 def show_heat_map(message):

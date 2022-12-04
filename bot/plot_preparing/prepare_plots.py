@@ -213,7 +213,6 @@ def build_linear_plot(sections, first_date, second_date):
                 lines.append(get_line(first_date.date(), second_date.date(), cause))
         else:
             lines.append(get_line(first_date.date(), second_date.date(), section))
-
     return plot_lines(first_date, second_date, lines, contains_causes)
 
 

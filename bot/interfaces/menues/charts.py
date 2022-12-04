@@ -17,11 +17,13 @@ button_titles = {
 
 @bot.message_handler(state=UserState.chart_type)
 def handle_select_fire_period(message):
+    if message.text == "⬅️ Назад":
+        show_select_chart_menu(message)
+        return
     try:
-        first_date, second_date = message.text.split(' - ')
+        first_date, second_date = message.text.split()
         first_date = datetime.strptime(first_date, "%d.%m.%Y")
         second_date = datetime.strptime(second_date, "%d.%m.%Y")
-        # first_date, second_date = map(lambda x: datetime.strptime(x, "%d.%m.%Y"), message.text.split(' - '))
         bot.send_message(message.chat.id,
                          "Отлично, осталось только подождать, пока загрузятся диаграммы")
         bot.set_state(message.from_user.id, UserState.select_fires_period, message.chat.id)
@@ -32,6 +34,7 @@ def handle_select_fire_period(message):
                 case "Круговая":
                     img = build_pie_chart(data["chart_data"], first_date, second_date)
             bot.send_photo(message.from_user.id, img)
+            show_main_menu(message)
     except Exception as e:
         bot.send_message(message.chat.id,
                          "Что-то пошло не так, попробуйте еще раз")
@@ -43,11 +46,13 @@ def handle_chart_select(message):
     if message.text == '⬅️ Назад':
         show_charts_menu(message)
     else:
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        markup.add("⬅️ Назад")
         with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
             data['chart_type'] = message.text[2:]
         bot.send_message(message.chat.id,
-                         "Введите даты, данные за которые вы хотите получить в формате: дд.мм.гггг - дд.мм.гггг",
-                         reply_markup=ReplyKeyboardRemove())
+                         "Введите даты через пробел: дд.мм.гггг дд.мм.гггг",
+                         reply_markup=markup)
         bot.set_state(message.from_user.id, UserState.chart_type, message.chat.id)
 
 
